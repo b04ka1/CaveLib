@@ -4,7 +4,6 @@ import com.b04ka.cavelib.deprecated.BiomeGenerationConfig;
 import com.b04ka.cavelib.deprecated.BiomeRarity;
 import com.b04ka.cavelib.deprecated.BiomeSourceAccessor;
 import com.b04ka.cavelib.deprecated.EventReplaceBiome;
-import com.b04ka.cavelib.utils.TestBiome;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -30,7 +29,6 @@ public class CommonEvent {
         if (biome != null) {
             Holder<Biome> biomeHolder = event.getBiomeSource().getResourceKeyMap().get(biome);
             if (biomeHolder != null) {
-//                event.setResult(Event.Result.ALLOW);
                 event.setBiomeToGenerate(biomeHolder);
             }
         }
@@ -54,7 +52,7 @@ public class CommonEvent {
                 expandedBiomeSource.setResourceKeyMap(biomeMap);
                 if (levelStemResourceKey.equals(LevelStem.OVERWORLD)) {
                     ImmutableSet.Builder<Holder<Biome>> biomeHolders = ImmutableSet.builder();
-                    for (ResourceKey<Biome> biomeResourceKey : TestBiome.testBiomes) {
+                    for (ResourceKey<Biome> biomeResourceKey : BiomeGenerationConfig.BIOMES.keySet()) {
                         allBiomes.getHolder(biomeResourceKey).ifPresent(biomeHolders::add);
                     }
                     expandedBiomeSource.expandBiomesWith(biomeHolders.build());

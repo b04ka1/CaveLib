@@ -1,7 +1,6 @@
 package com.b04ka.cavelib.mixin.client;
 
 
-import com.b04ka.cavelib.CaveLib;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.LevelHeightAccessor;
 import org.spongepowered.asm.mixin.Mixin;

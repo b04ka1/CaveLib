@@ -6,8 +6,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import net.neoforged.bus.api.Event;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.IModBusEvent;
 
 public class EventReplaceBiome extends Event {
 
