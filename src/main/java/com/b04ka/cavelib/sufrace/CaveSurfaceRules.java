@@ -10,7 +10,7 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class CaveSufraceRules {
+public class CaveSurfaceRules {
 
     private static Map<ResourceKey<Biome>,SurfaceRules.RuleSource> ruleMap = new LinkedHashMap<>();
 

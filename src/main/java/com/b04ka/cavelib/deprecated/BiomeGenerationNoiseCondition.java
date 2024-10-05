@@ -157,7 +157,7 @@ public class BiomeGenerationNoiseCondition {
         private float[] weirdness;
         private float[] depth;
         private String[] dimensions;
-        private static int rarityOffset=-1;
+        private static int rarityOffset;
 
         public Builder() {
         }

@@ -5,7 +5,7 @@ import com.b04ka.cavelib.misc.CLUtils;
 import com.b04ka.cavelib.proxy.ClientProxy;
 import com.b04ka.cavelib.proxy.CommonProxy;
 import com.b04ka.cavelib.structure.piece.CLStructurePieceRegistry;
-import com.b04ka.cavelib.sufrace.CaveSufraceRules;
+import com.b04ka.cavelib.sufrace.CaveSurfaceRules;
 import com.b04ka.cavelib.sufrace.SurfaceRuleConditionRegistry;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -32,7 +32,7 @@ public class CaveLib {
     }
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(()->{
-            CaveSufraceRules.setup();
+            CaveSurfaceRules.setup();
         });
     }
     private void clientSetup(final FMLClientSetupEvent event) {
