@@ -1,9 +1,6 @@
 package com.b04ka.cavelib.event;
 
-import com.b04ka.cavelib.deprecated.BiomeGenerationConfig;
-import com.b04ka.cavelib.deprecated.BiomeRarity;
-import com.b04ka.cavelib.deprecated.BiomeSourceAccessor;
-import com.b04ka.cavelib.deprecated.EventReplaceBiome;
+import com.b04ka.cavelib.deprecated.*;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -17,8 +14,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CommonEvent {
 
@@ -52,7 +51,11 @@ public class CommonEvent {
                 expandedBiomeSource.setResourceKeyMap(biomeMap);
                 if (levelStemResourceKey.equals(LevelStem.OVERWORLD)) {
                     ImmutableSet.Builder<Holder<Biome>> biomeHolders = ImmutableSet.builder();
-                    for (ResourceKey<Biome> biomeResourceKey : BiomeGenerationConfig.BIOMES.keySet()) {
+                    List<ResourceKey<Biome>> allBiomes1 = ExpandedBiomes.biomes.values()
+                            .stream()
+                            .flatMap(List::stream)
+                            .toList();
+                    for (ResourceKey<Biome> biomeResourceKey : allBiomes1) {
                         allBiomes.getHolder(biomeResourceKey).ifPresent(biomeHolders::add);
                     }
                     expandedBiomeSource.expandBiomesWith(biomeHolders.build());

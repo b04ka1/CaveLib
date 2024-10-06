@@ -12,7 +12,7 @@ import net.minecraft.world.level.dimension.LevelStem;
 import java.util.*;
 
 public class ExpandedBiomes {
-    private static Map<ResourceKey<LevelStem>, List<ResourceKey<Biome>>> biomes = new HashMap<>();
+    public static Map<ResourceKey<LevelStem>, List<ResourceKey<Biome>>> biomes = new HashMap<>();
 
     public static void addExpandedBiome(ResourceKey<Biome> biome, ResourceKey<LevelStem> dimension){
         List<ResourceKey<Biome>> list;
