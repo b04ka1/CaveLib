@@ -23,6 +23,22 @@ public class ClientEvent {
     private static Vec3 lastSampledFogColor = Vec3.ZERO;
     private static Vec3 lastSampledWaterFogColor = Vec3.ZERO;
 
+    public static float getLastSampledFogNearness() {
+        return lastSampledFogNearness;
+    }
+
+    public static float getLastSampledWaterFogFarness() {
+        return lastSampledWaterFogFarness;
+    }
+
+    public static Vec3 getLastSampledFogColor() {
+        return lastSampledFogColor;
+    }
+
+    public static Vec3 getLastSampledWaterFogColor() {
+        return lastSampledWaterFogColor;
+    }
+
     @SubscribeEvent
     public void onClientTick(ClientTickEvent.Post event){
             Entity cameraEntity = Minecraft.getInstance().cameraEntity;
