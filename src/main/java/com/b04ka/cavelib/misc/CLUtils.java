@@ -13,14 +13,8 @@ public class CLUtils {
        return BuiltInRegistries.BLOCK.get(ResourceLocation.bySeparator(name, ':'));
     }
 
-    public static Block getBlockFromFluid(Fluid fluid){
-        String id = BuiltInRegistries.FLUID.getKey(fluid).toString();
-        return BuiltInRegistries.BLOCK.get(ResourceLocation.bySeparator(id, ':'));
-    }
-
-    public static Fluid getFluidFromBlock(Block block){
-        String id = BuiltInRegistries.BLOCK.getKey(block).toString();
-        return BuiltInRegistries.FLUID.get(ResourceLocation.bySeparator(id, ':'));
+    public static Fluid getFluidFromId(String name){
+        return BuiltInRegistries.FLUID.get(ResourceLocation.bySeparator(name, ':'));
     }
 
     public static <T> T forgeUnsafeRunForDist(Supplier<Supplier<T>> clientTarget, Supplier<Supplier<T>> serverTarget) {

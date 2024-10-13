@@ -4,6 +4,7 @@ import com.b04ka.cavelib.misc.ACMath;
 import com.b04ka.cavelib.misc.CLUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
@@ -21,18 +22,44 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 
-public class LakeStructurePiece extends AbstractCaveGenerationStructurePiece {
+public class UndergroundLakeStructurePiece extends AbstractCaveGenerationStructurePiece {
+    private final Fluid fluid;
 
-    public LakeStructurePiece(BlockPos chunkCorner, BlockPos holeCenter, int bowlHeight, int bowlRadius, ResourceKey<Biome> biomeResourceKey, Block surroundCornerOfLiquid, Block fluidBlock, Fluid fluid) {
-        super(CLStructurePieceRegistry.LAKE.get(), chunkCorner, holeCenter, bowlHeight, bowlRadius, biomeResourceKey, surroundCornerOfLiquid, fluidBlock, CLUtils.getBlockFromFluid(fluid));
+    public UndergroundLakeStructurePiece(BlockPos chunkCorner, BlockPos holeCenter, int bowlHeight, int bowlRadius, ResourceKey<Biome> biomeResourceKey, Block surroundCornerOfLiquid, Block surroundCornerOfOtherLiquids, Block fluidBlock, Fluid fluid) {
+        super(CLStructurePieceRegistry.UNDERGROUND_LAKE.get(), chunkCorner, holeCenter, bowlHeight, bowlRadius, biomeResourceKey, surroundCornerOfLiquid, fluidBlock, surroundCornerOfOtherLiquids);
+        this.fluid = fluid;
     }
 
-    public LakeStructurePiece(CompoundTag tag) {
-        super(CLStructurePieceRegistry.LAKE.get(), tag);
+    public UndergroundLakeStructurePiece(CompoundTag tag) {
+        super(CLStructurePieceRegistry.UNDERGROUND_LAKE.get(), tag);
+        this.fluid = CLUtils.getFluidFromId(tag.getString("Fluid"));
     }
 
-    public LakeStructurePiece(StructurePieceSerializationContext structurePieceSerializationContext, CompoundTag tag) {
+    public UndergroundLakeStructurePiece(StructurePieceSerializationContext structurePieceSerializationContext, CompoundTag tag) {
         this(tag);
+    }
+
+    @Override
+    protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
+        tag.putInt("TPX", this.chunkCorner.getX());
+        tag.putInt("TPY", this.chunkCorner.getY());
+        tag.putInt("TPZ", this.chunkCorner.getZ());
+        tag.putInt("HCX", this.holeCenter.getX());
+        tag.putInt("HCY", this.holeCenter.getY());
+        tag.putInt("HCZ", this.holeCenter.getZ());
+        tag.putInt("Height", this.height);
+        tag.putInt("Radius", this.radius);
+        if (this.biomeResourceLocation != null) {
+            tag.putString("Biome", this.biomeResourceLocation.toString());
+        }
+        tag.putString("SurroundLiquid", BuiltInRegistries.BLOCK.getKey(this.surroundCornerOfLiquid).toString());
+        if (this.floor != null) {
+            tag.putString("Floor", BuiltInRegistries.BLOCK.getKey(this.floor).toString());
+            if (this.belowFloor != null) {
+                tag.putString("BelowFloor", BuiltInRegistries.BLOCK.getKey(this.belowFloor).toString());
+            }
+        }
+        tag.putString("Fluid", BuiltInRegistries.FLUID.getKey(this.fluid).toString());
     }
 
     public void postProcess(WorldGenLevel level, StructureManager featureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos blockPos) {
@@ -64,12 +91,12 @@ public class LakeStructurePiece extends AbstractCaveGenerationStructurePiece {
                             }
                         } else {
                             if (carve.getY() < -10) {
-                                checkedSetBlock(level, carve, this.floor.defaultBlockState());//fluid
+                                checkedSetBlock(level, carve, this.floor.defaultBlockState()); //fluid
                                 surroundCornerLiquid(level, carve);
                             } else {
                                 if (isTouchingNonAcidLiquid(level, carve)) {
-                                    surroundCorner(level, carve);
-                                    checkedSetBlock(level, carve, this.surroundCornerOfLiquid.defaultBlockState());
+                                    surroundCornerOtherLiquid(level, carve);
+                                    checkedSetBlock(level, carve, this.belowFloor.defaultBlockState());
                                 }
                                 checkedSetBlock(level, carve, Blocks.CAVE_AIR.defaultBlockState());
                             }
@@ -97,20 +124,20 @@ public class LakeStructurePiece extends AbstractCaveGenerationStructurePiece {
             offset.set(center);
             offset.move(dir);
             BlockState state = checkedGetBlockIgnoreY(level, offset);
-            if (!state.getFluidState().is(CLUtils.getFluidFromBlock(this.belowFloor))) {
+            if (!state.getFluidState().is(this.fluid)) {
                 checkedSetBlock(level, offset, this.surroundCornerOfLiquid.defaultBlockState());
             }
         }
     }
 
-    private void surroundCorner(WorldGenLevel level, BlockPos.MutableBlockPos center) {
+    private void surroundCornerOtherLiquid(WorldGenLevel level, BlockPos.MutableBlockPos center) {
         BlockPos.MutableBlockPos offset = new BlockPos.MutableBlockPos();
         for (Direction dir : Direction.values()) {
             offset.set(center);
             offset.move(dir);
             BlockState state = checkedGetBlock(level, offset);
-            if (!state.getFluidState().isEmpty() && !state.getFluidState().is(CLUtils.getFluidFromBlock(this.belowFloor))) {
-                checkedSetBlock(level, offset, this.surroundCornerOfLiquid.defaultBlockState());
+            if (!state.getFluidState().isEmpty() && !state.getFluidState().is(this.fluid)) {
+                checkedSetBlock(level, offset, this.floor.defaultBlockState());
             }
         }
     }
@@ -121,11 +148,11 @@ public class LakeStructurePiece extends AbstractCaveGenerationStructurePiece {
             offset.set(center);
             offset.move(dir);
             FluidState state = checkedGetBlock(level, offset).getFluidState();
-            if (!state.isEmpty() && !state.is(CLUtils.getFluidFromBlock(this.belowFloor))) {
+            if (!state.isEmpty() && !state.is(this.fluid)) {
                 return true;
             }
         }
         FluidState state = checkedGetBlock(level, center).getFluidState();
-        return !state.isEmpty() && !state.is(CLUtils.getFluidFromBlock(this.belowFloor));
+        return !state.isEmpty() && !state.is(this.fluid);
     }
 }

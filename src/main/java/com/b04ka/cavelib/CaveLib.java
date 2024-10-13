@@ -29,7 +29,6 @@ public class CaveLib {
         NeoForge.EVENT_BUS.register(new CommonEvent());
         SurfaceRuleConditionRegistry.DEF_REG.register(modEventBus);
         CLStructurePieceRegistry.STRUCTURE_PIECE.register(modEventBus);
-        TestBiome.DEFERRED_REGISTER.register(modEventBus);
     }
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(()->{
