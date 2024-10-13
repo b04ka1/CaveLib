@@ -16,4 +16,6 @@ public class CLStructurePieceRegistry {
     public static final Supplier<StructurePieceType> CAVERN = STRUCTURE_PIECE.register("cavern", ()-> CavernStructurePiece::new);
 
     public static final Supplier<StructurePieceType> CANYON = STRUCTURE_PIECE.register("canyon", ()-> CanyonStructurePiece::new);
+
+    public static final Supplier<StructurePieceType> LAKE = STRUCTURE_PIECE.register("canyon", ()-> LakeStructurePiece::new);
 }
