@@ -73,7 +73,7 @@ public class CaveBiomeVisuals {
         }
     }
 
-    public Builder getBuilder() {
+    public static Builder getBuilder() {
         return new Builder();
     }
 
