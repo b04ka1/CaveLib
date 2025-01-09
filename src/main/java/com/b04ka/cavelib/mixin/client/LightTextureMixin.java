@@ -160,7 +160,7 @@ public abstract class LightTextureMixin {
 
                         float f14 = this.minecraft.options.gamma().get().floatValue();
                         float biomeAmbientLight = ClientProxy.lastBiomeAmbientLightAmountPrev + (ClientProxy.lastBiomeAmbientLightAmount - ClientProxy.lastBiomeAmbientLightAmountPrev) * Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(true);
-                        if(biomeAmbientLight > 0.0F){
+                        if (biomeAmbientLight > 0.0F) {
                             f14 = Mth.clamp(f14 + biomeAmbientLight, 0.0F, 1.0F);
                         }
 
@@ -170,9 +170,9 @@ public abstract class LightTextureMixin {
                         clampColor(vector3f1);
                         vector3f1.mul(255.0F);
                         int j1 = 255;
-                        int k = (int)vector3f1.x();
-                        int l = (int)vector3f1.y();
-                        int i1 = (int)vector3f1.z();
+                        int k = (int) vector3f1.x();
+                        int l = (int) vector3f1.y();
+                        int i1 = (int) vector3f1.z();
                         this.lightPixels.setPixelRGBA(j, i, 0xFF000000 | i1 << 16 | l << 8 | k);
                     }
                 }

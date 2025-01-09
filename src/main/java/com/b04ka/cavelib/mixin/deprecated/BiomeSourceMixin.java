@@ -35,7 +35,7 @@ public class BiomeSourceMixin implements BiomeSourceAccessor {
 
     @Override
     public void expandBiomesWith(Set<Holder<Biome>> newGenBiomes) {
-        if(!expanded){
+        if (!expanded) {
             ImmutableSet.Builder<Holder<Biome>> builder = ImmutableSet.builder();
             builder.addAll(this.possibleBiomes.get());
             builder.addAll(newGenBiomes);

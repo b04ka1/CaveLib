@@ -14,27 +14,27 @@ import java.util.*;
 public class ExpandedBiomes {
     public static Map<ResourceKey<LevelStem>, List<ResourceKey<Biome>>> biomes = new HashMap<>();
 
-    public static void addExpandedBiome(ResourceKey<Biome> biome, ResourceKey<LevelStem> dimension){
+    public static void addExpandedBiome(ResourceKey<Biome> biome, ResourceKey<LevelStem> dimension) {
         List<ResourceKey<Biome>> list;
-        if(!biomes.containsKey(dimension)){
+        if (!biomes.containsKey(dimension)) {
             list = new ArrayList<>();
-        }else{
+        } else {
             list = biomes.get(dimension);
         }
-        if(!list.contains(biome)){
+        if (!list.contains(biome)) {
             list.add(biome);
         }
         biomes.put(dimension, list);
     }
 
-    public static Set<Holder<Biome>> buildBiomeList(RegistryAccess registryAccess, ResourceKey<LevelStem> dimension){
+    public static Set<Holder<Biome>> buildBiomeList(RegistryAccess registryAccess, ResourceKey<LevelStem> dimension) {
         List<ResourceKey<Biome>> list = biomes.get(dimension);
-        if(list == null || list.isEmpty()){
+        if (list == null || list.isEmpty()) {
             return Set.of();
         }
         Registry<Biome> allBiomes = registryAccess.registryOrThrow(Registries.BIOME);
         ImmutableSet.Builder<Holder<Biome>> biomeHolders = ImmutableSet.builder();
-        for(ResourceKey<Biome> biomeResourceKey : list){
+        for (ResourceKey<Biome> biomeResourceKey : list) {
             Optional<Holder.Reference<Biome>> holderOptional = allBiomes.getHolder(biomeResourceKey);
             holderOptional.ifPresent(biomeHolders::add);
         }

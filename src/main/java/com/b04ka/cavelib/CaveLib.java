@@ -1,9 +1,7 @@
 package com.b04ka.cavelib;
 
+import com.b04ka.cavelib.event.ClientEvent;
 import com.b04ka.cavelib.event.CommonEvent;
-import com.b04ka.cavelib.misc.CLUtils;
-import com.b04ka.cavelib.proxy.ClientProxy;
-import com.b04ka.cavelib.proxy.CommonProxy;
 import com.b04ka.cavelib.structure.piece.CLStructurePieceRegistry;
 import com.b04ka.cavelib.sufrace.CaveSurfaceRules;
 import com.b04ka.cavelib.sufrace.SurfaceRuleConditionRegistry;
@@ -18,8 +16,6 @@ import org.slf4j.Logger;
 
 @Mod(CaveLib.MODID)
 public class CaveLib {
-
-    public static CommonProxy PROXY = CLUtils.forgeUnsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
     public static final String MODID = "cavelib";
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -30,12 +26,15 @@ public class CaveLib {
         SurfaceRuleConditionRegistry.DEF_REG.register(modEventBus);
         CLStructurePieceRegistry.STRUCTURE_PIECE.register(modEventBus);
     }
+
     private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(()->{
+        event.enqueueWork(() -> {
             CaveSurfaceRules.setup();
         });
     }
+
     private void clientSetup(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> PROXY.clientInit());
+        event.enqueueWork(() ->
+                NeoForge.EVENT_BUS.register(new ClientEvent()));
     }
 }

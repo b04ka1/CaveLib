@@ -20,9 +20,13 @@ import java.util.Optional;
 @Mixin(JigsawStructure.class)
 public class JigsawStructureMixin {
 
-    @Shadow @Final private Optional<ResourceLocation> startJigsawName;
+    @Shadow
+    @Final
+    private Optional<ResourceLocation> startJigsawName;
 
-    @Shadow @Final private Holder<StructureTemplatePool> startPool;
+    @Shadow
+    @Final
+    private Holder<StructureTemplatePool> startPool;
 
     @Inject(
             method = {"Lnet/minecraft/world/level/levelgen/structure/structures/JigsawStructure;findGenerationPoint(Lnet/minecraft/world/level/levelgen/structure/Structure$GenerationContext;)Ljava/util/Optional;"},
@@ -31,7 +35,7 @@ public class JigsawStructureMixin {
             at = @At(value = "HEAD")
     )
     private void cl_findGenerationPoint(Structure.GenerationContext context, CallbackInfoReturnable<Optional<Structure.GenerationStub>> cir) {
-        if((this.startJigsawName.isPresent() && this.startJigsawName.get().toString().equals("minecraft:city_anchor")) || this.startPool.is(ResourceLocation.withDefaultNamespace("trial_chambers/chamber/end"))){// limit to only ancient cities and trial chambers
+        if ((this.startJigsawName.isPresent() && this.startJigsawName.get().toString().equals("minecraft:city_anchor")) || this.startPool.is(ResourceLocation.withDefaultNamespace("trial_chambers/chamber/end"))) {// limit to only ancient cities and trial chambers
             int i = context.chunkPos().getBlockX(9);
             int j = context.chunkPos().getBlockZ(9);
 

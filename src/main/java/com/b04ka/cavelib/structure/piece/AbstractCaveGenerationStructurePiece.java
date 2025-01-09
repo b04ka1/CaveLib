@@ -39,7 +39,7 @@ public abstract class AbstractCaveGenerationStructurePiece extends StructurePiec
     public final ResourceLocation biomeResourceLocation;
 
     public AbstractCaveGenerationStructurePiece(StructurePieceType pieceType, BlockPos chunkCorner, BlockPos holeCenter, int height, int radius, ResourceKey<Biome> biomeResourceKey, Block surroundCornerOfLiquid, Block floor, Block belowFloor) {
-        this(pieceType, chunkCorner, holeCenter, height, radius, chunkCorner.getY() - 2, chunkCorner.getY() + 16, biomeResourceKey!=null? biomeResourceKey.location():null, surroundCornerOfLiquid, floor, belowFloor);
+        this(pieceType, chunkCorner, holeCenter, height, radius, chunkCorner.getY() - 2, chunkCorner.getY() + 16, biomeResourceKey != null ? biomeResourceKey.location() : null, surroundCornerOfLiquid, floor, belowFloor);
     }
 
     public AbstractCaveGenerationStructurePiece(StructurePieceType pieceType, BlockPos chunkCorner, BlockPos holeCenter, int height, int radius, int minY, int maxY, ResourceLocation biomeResourceLocation, Block surroundCornerOfLiquid, Block floor, Block belowFloor) {
@@ -60,10 +60,10 @@ public abstract class AbstractCaveGenerationStructurePiece extends StructurePiec
         this.holeCenter = new BlockPos(tag.getInt("HCX"), tag.getInt("HCY"), tag.getInt("HCZ"));
         this.height = tag.getInt("Height");
         this.radius = tag.getInt("Radius");
-        this.biomeResourceLocation = ResourceLocation.bySeparator(tag.getString("Biome"),':');
+        this.biomeResourceLocation = ResourceLocation.bySeparator(tag.getString("Biome"), ':');
         this.surroundCornerOfLiquid = CLUtils.getBlockFromId(tag.getString("SurroundLiquid"));
-        this.floor = !tag.getString("Floor").isEmpty() ? CLUtils.getBlockFromId(tag.getString("Floor")): null;
-        this.belowFloor = !tag.getString("BelowFloor").isEmpty() && this.floor!=null ? CLUtils.getBlockFromId(tag.getString("BelowFloor")): null;
+        this.floor = !tag.getString("Floor").isEmpty() ? CLUtils.getBlockFromId(tag.getString("Floor")) : null;
+        this.belowFloor = !tag.getString("BelowFloor").isEmpty() && this.floor != null ? CLUtils.getBlockFromId(tag.getString("BelowFloor")) : null;
     }
 
     private static BoundingBox createBoundingBox(BlockPos origin, int minY, int maxY) {
@@ -80,7 +80,7 @@ public abstract class AbstractCaveGenerationStructurePiece extends StructurePiec
         tag.putInt("HCZ", this.holeCenter.getZ());
         tag.putInt("Height", this.height);
         tag.putInt("Radius", this.radius);
-        if(this.biomeResourceLocation!=null){
+        if (this.biomeResourceLocation != null) {
             tag.putString("Biome", this.biomeResourceLocation.toString());
         }
         tag.putString("SurroundLiquid", BuiltInRegistries.BLOCK.getKey(this.surroundCornerOfLiquid).toString());
@@ -93,11 +93,11 @@ public abstract class AbstractCaveGenerationStructurePiece extends StructurePiec
     }
 
     public void replaceBiomes(WorldGenLevel level, int belowLevel) {
-        if(replaceBiomesError){
-          return;
+        if (replaceBiomesError) {
+            return;
         }
         try {
-            if(this.biomeResourceLocation!=null) {
+            if (this.biomeResourceLocation != null) {
                 Holder<Biome> biomeHolder = level.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(ResourceKey.create(Registries.BIOME, this.biomeResourceLocation));
                 ChunkAccess chunkAccess = level.getChunk(this.chunkCorner);
                 int stopY = level.getSeaLevel() - belowLevel;
@@ -124,9 +124,9 @@ public abstract class AbstractCaveGenerationStructurePiece extends StructurePiec
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             replaceBiomesError = true;
-            CaveLib.LOGGER.warn("Could not replace biomes for Alex's Caves. Error will show only once - likely a world-gen mod incompatibility. Or biome is null");
+            CaveLib.LOGGER.warn("Could not replace biomes for" + this.biomeResourceLocation.getNamespace() + ". Error will show only once - likely a world-gen mod incompatibility. Or biome is null");
             e.printStackTrace();
         }
     }
@@ -159,21 +159,21 @@ public abstract class AbstractCaveGenerationStructurePiece extends StructurePiec
 
     public void decorateFloor(WorldGenLevel level, RandomSource rand, BlockPos.MutableBlockPos carveBelow) {
         BlockPos carveBelowImmutable = carveBelow.immutable();
-        BlockState floor = this.floor!=null ? this.floor.defaultBlockState() : null;
-        BlockState belowFloor = this.belowFloor!=null ? this.belowFloor.defaultBlockState() : null;
-        if (floor != null){
-            if(belowFloor!= null){
-            checkedSetBlock(level, carveBelow, floor);
-                for (int i = 0; i < 1 + rand.nextInt(2); i++) {
-                carveBelowImmutable = carveBelow.below();
-                checkedSetBlock(level, carveBelowImmutable, belowFloor);
-                }
-            } else{
-            float floorNoise = (ACMath.sampleNoise2D(carveBelow.getX(), carveBelow.getZ(), 50) + 1.0F) * 0.5F;
-            checkedSetBlock(level, carveBelow, floor);
-                for (int i = 0; i < Math.ceil(floorNoise * 3); i++) {
-                carveBelow.move(0, 1, 0);
+        BlockState floor = this.floor != null ? this.floor.defaultBlockState() : null;
+        BlockState belowFloor = this.belowFloor != null ? this.belowFloor.defaultBlockState() : null;
+        if (floor != null) {
+            if (belowFloor != null) {
                 checkedSetBlock(level, carveBelow, floor);
+                for (int i = 0; i < 1 + rand.nextInt(2); i++) {
+                    carveBelowImmutable = carveBelow.below();
+                    checkedSetBlock(level, carveBelowImmutable, belowFloor);
+                }
+            } else {
+                float floorNoise = (ACMath.sampleNoise2D(carveBelow.getX(), carveBelow.getZ(), 50) + 1.0F) * 0.5F;
+                checkedSetBlock(level, carveBelow, floor);
+                for (int i = 0; i < Math.ceil(floorNoise * 3); i++) {
+                    carveBelow.move(0, 1, 0);
+                    checkedSetBlock(level, carveBelow, floor);
                 }
             }
         }

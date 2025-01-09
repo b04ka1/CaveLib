@@ -36,45 +36,45 @@ public class BiomeGenerationNoiseCondition {
     }
 
     public boolean test(EventReplaceBiome event, VoronoiGenerator.VoronoiInfo info) {
+        Vec3 rareBiomeCenter = BiomeRarity.getRareBiomeCenter(info);
+        Climate.TargetPoint centerTargetPoint = event.getClimateSampler().sample((int) Math.floor(rareBiomeCenter.x), event.getY(), (int) Math.floor(rareBiomeCenter.z));
+        float c = Climate.unquantizeCoord(centerTargetPoint.continentalness());
+        float e = Climate.unquantizeCoord(centerTargetPoint.erosion());
+        float v = Climate.unquantizeCoord(centerTargetPoint.humidity());
+        float t = Climate.unquantizeCoord(centerTargetPoint.temperature());
+        float w = Climate.unquantizeCoord(centerTargetPoint.weirdness());
         if (disabledCompletely) {
+            return false;
+        }
+        if (event.getWorldDimension() != null && !dimensions.contains(event.getWorldDimension().location().toString())) {
             return false;
         }
         if (!isFarEnoughFromSpawn(event, distanceFromSpawn)) {
             return false;
         }
-        Vec3 rareBiomeCenter = BiomeRarity.getRareBiomeCenter(info);
         if (rareBiomeCenter == null) {
             return false;
         }
-        Climate.TargetPoint centerTargetPoint = event.getClimateSampler().sample((int)Math.floor(rareBiomeCenter.x), event.getY(), (int)Math.floor(rareBiomeCenter.z));
-        float f = Climate.unquantizeCoord(centerTargetPoint.continentalness());
-        float f1 = Climate.unquantizeCoord(centerTargetPoint.erosion());
-        float f2 = Climate.unquantizeCoord(centerTargetPoint.temperature());
-        float f3 = Climate.unquantizeCoord(centerTargetPoint.humidity());
-        float f4 = Climate.unquantizeCoord(centerTargetPoint.weirdness());
-        //for these values, sample the center of the possible biome instead of every quad
-        if (continentalness != null && continentalness.length >= 2 && (f < continentalness[0] || f > continentalness[1])) {
+        if (continentalness != null && continentalness.length >= 2 && (c < continentalness[0] || c > continentalness[1])) {
             return false;
         }
-        if (erosion != null && erosion.length >= 2 && (f1 < erosion[0] || f1 > erosion[1])) {
+        if (erosion != null && erosion.length >= 2 && (e < erosion[0] || e > erosion[1])) {
             return false;
         }
-        if (humidity != null && humidity.length >= 2 && (f2 < humidity[0] || f2 > humidity[1])) {
+        if (humidity != null && humidity.length >= 2 && (v < humidity[0] || v > humidity[1])) {
             return false;
         }
-        if (temperature != null && temperature.length >= 2 && (f3 < temperature[0] || f3 > temperature[1])) {
+        if (temperature != null && temperature.length >= 2 && (t < temperature[0] || t > temperature[1])) {
             return false;
         }
-        if (weirdness != null && weirdness.length >= 2 && (f4 < weirdness[0] || f4 > weirdness[1])) {
+        if (weirdness != null && weirdness.length >= 2 && (w < weirdness[0] || w > weirdness[1])) {
             return false;
         }
         // sample depth per coord - we don't want biomes bleeding onto the surface
         if (depth != null && depth.length >= 2 && !event.testDepth(depth[0], depth[1])) {
             return false;
         }
-        if(event.getWorldDimension() != null && !dimensions.contains(event.getWorldDimension().location().toString())){
-            return false;
-        }
+
         return true;
     }
 
@@ -85,45 +85,45 @@ public class BiomeGenerationNoiseCondition {
     }
 
     public boolean test(int x, int y, int z, float unquantizedDepth, Climate.Sampler climateSampler, ResourceKey<Level> dimension, VoronoiGenerator.VoronoiInfo info) {
+        Vec3 rareBiomeCenter = BiomeRarity.getRareBiomeCenter(info);
+        Climate.TargetPoint centerTargetPoint = climateSampler.sample((int) Math.floor(rareBiomeCenter.x), y, (int) Math.floor(rareBiomeCenter.z));
+        float c = Climate.unquantizeCoord(centerTargetPoint.continentalness());
+        float e = Climate.unquantizeCoord(centerTargetPoint.erosion());
+        float v = Climate.unquantizeCoord(centerTargetPoint.humidity());
+        float t = Climate.unquantizeCoord(centerTargetPoint.temperature());
+        float w = Climate.unquantizeCoord(centerTargetPoint.weirdness());
         if (disabledCompletely) {
+            return false;
+        }
+        if (dimension != null && !dimensions.contains(dimension.location().toString())) {
             return false;
         }
         if (!isFarEnoughFromSpawn(x, z, distanceFromSpawn)) {
             return false;
         }
-        Vec3 rareBiomeCenter = BiomeRarity.getRareBiomeCenter(info);
         if (rareBiomeCenter == null) {
             return false;
         }
-        Climate.TargetPoint centerTargetPoint = climateSampler.sample((int)Math.floor(rareBiomeCenter.x), y, (int)Math.floor(rareBiomeCenter.z));
-        float f = Climate.unquantizeCoord(centerTargetPoint.continentalness());
-        float f1 = Climate.unquantizeCoord(centerTargetPoint.erosion());
-        float f2 = Climate.unquantizeCoord(centerTargetPoint.temperature());
-        float f3 = Climate.unquantizeCoord(centerTargetPoint.humidity());
-        float f4 = Climate.unquantizeCoord(centerTargetPoint.weirdness());
-        //for these values, sample the center of the possible biome instead of every quad
-        if (continentalness != null && continentalness.length >= 2 && (f < continentalness[0] || f > continentalness[1])) {
+        if (continentalness != null && continentalness.length >= 2 && (c < continentalness[0] || c > continentalness[1])) {
             return false;
         }
-        if (erosion != null && erosion.length >= 2 && (f1 < erosion[0] || f1 > erosion[1])) {
+        if (erosion != null && erosion.length >= 2 && (e < erosion[0] || e > erosion[1])) {
             return false;
         }
-        if (humidity != null && humidity.length >= 2 && (f2 < humidity[0] || f2 > humidity[1])) {
+        if (humidity != null && humidity.length >= 2 && (v < humidity[0] || v > humidity[1])) {
             return false;
         }
-        if (temperature != null && temperature.length >= 2 && (f3 < temperature[0] || f3 > temperature[1])) {
+        if (temperature != null && temperature.length >= 2 && (t < temperature[0] || t > temperature[1])) {
             return false;
         }
-        if (weirdness != null && weirdness.length >= 2 && (f4 < weirdness[0] || f4 > weirdness[1])) {
+        if (weirdness != null && weirdness.length >= 2 && (w < weirdness[0] || w > weirdness[1])) {
             return false;
         }
         // sample depth per coord - we don't want biomes bleeding onto the surface
         if (depth != null && depth.length >= 2 && (unquantizedDepth < depth[0] || unquantizedDepth > depth[1])) {
             return false;
         }
-        if(dimension != null && !dimensions.contains(dimension.location().toString())){
-            return false;
-        }
+
         return true;
     }
 
@@ -142,14 +142,13 @@ public class BiomeGenerationNoiseCondition {
         return dimensions == null && !disabledCompletely;
     }
 
-    public int getRarityOffset(){
+    public int getRarityOffset() {
         return alexscavesRarityOffset;
     }
 
     public static final class Builder {
         private boolean disabledCompletely;
         private int distanceFromSpawn;
-        private float[] alexBiomeRarity;
         private float[] continentalness;
         private float[] erosion;
         private float[] humidity;

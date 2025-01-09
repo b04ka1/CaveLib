@@ -5,17 +5,17 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "cavelib.refmap.json",
   "mixins": [
-    "NoiseBasedChunkGeneratorMixin",
     "JigsawStructureMixin",
-    "deprecated.MultiNoiseBiomeSourceMixin",
+    "NoiseBasedChunkGeneratorMixin",
     "deprecated.BiomeSourceMixin",
-    "deprecated.ChunkStatusTasksMixin"
+    "deprecated.ChunkStatusTasksMixin",
+    "deprecated.MultiNoiseBiomeSourceMixin"
   ],
   "client": [
-    "client.LightTextureMixin",
-    "client.ClientLevelMixin",
     "client.ClientLevelDataMixin",
-    "client.LevelRendererMixin"
+    "client.ClientLevelMixin",
+    "client.LevelRendererMixin",
+    "client.LightTextureMixin"
   ],
   "injectors": {
     "defaultRequire": 1

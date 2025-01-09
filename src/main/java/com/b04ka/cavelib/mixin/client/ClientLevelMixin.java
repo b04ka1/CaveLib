@@ -32,11 +32,11 @@ public abstract class ClientLevelMixin extends Level {
             ),
             cancellable = true)
     private void cl_getSkyColor_timeOfDay(Vec3 position, float partialTick, CallbackInfoReturnable<Vec3> cir) {
-            if (ClientProxy.clSkyOverrideAmount > 0.0F) {
-                Vec3 prevVec3 = cir.getReturnValue();
-                Vec3 sampledVec3 = ClientProxy.clSkyOverrideColor;
-                cir.setReturnValue(prevVec3.add(sampledVec3.subtract(prevVec3).scale(ClientProxy.clSkyOverrideAmount)));
-            }
+        if (ClientProxy.clSkyOverrideAmount > 0.0F) {
+            Vec3 prevVec3 = cir.getReturnValue();
+            Vec3 sampledVec3 = ClientProxy.clSkyOverrideColor;
+            cir.setReturnValue(prevVec3.add(sampledVec3.subtract(prevVec3).scale(ClientProxy.clSkyOverrideAmount)));
+        }
 
     }
 
@@ -46,9 +46,9 @@ public abstract class ClientLevelMixin extends Level {
             ),
             cancellable = true)
     private void cl_getSkyDarken_timeOfDay(float partialTick, CallbackInfoReturnable<Float> cir) {
-            float skyDarken = cir.getReturnValue();
-            if (ClientProxy.clSkyOverrideAmount > 0.0F) {
-                cir.setReturnValue(Math.max(skyDarken, ClientProxy.clSkyOverrideAmount));
-            }
+        float skyDarken = cir.getReturnValue();
+        if (ClientProxy.clSkyOverrideAmount > 0.0F) {
+            cir.setReturnValue(Math.max(skyDarken, ClientProxy.clSkyOverrideAmount));
+        }
     }
 }

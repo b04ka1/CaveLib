@@ -9,6 +9,8 @@ import java.util.Set;
 
 public interface BiomeSourceAccessor {
     void setResourceKeyMap(Map<ResourceKey<Biome>, Holder<Biome>> var1);
+
     Map<ResourceKey<Biome>, Holder<Biome>> getResourceKeyMap();
+
     void expandBiomesWith(Set<Holder<Biome>> var1);
 }

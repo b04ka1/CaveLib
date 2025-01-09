@@ -30,21 +30,35 @@ public abstract class LevelRendererMixin {
     @Shadow
     private int ticks;
 
-    @Shadow @Final private Minecraft minecraft;
+    @Shadow
+    @Final
+    private Minecraft minecraft;
 
-    @Shadow protected abstract void renderEndSky(PoseStack p_109781_);
+    @Shadow
+    protected abstract void renderEndSky(PoseStack p_109781_);
 
-    @Shadow protected abstract boolean doesMobEffectBlockSky(Camera p_234311_);
+    @Shadow
+    protected abstract boolean doesMobEffectBlockSky(Camera p_234311_);
 
-    @Shadow @Nullable private VertexBuffer skyBuffer;
+    @Shadow
+    @Nullable
+    private VertexBuffer skyBuffer;
 
-    @Shadow @Final private static ResourceLocation SUN_LOCATION;
+    @Shadow
+    @Final
+    private static ResourceLocation SUN_LOCATION;
 
-    @Shadow @Final private static ResourceLocation MOON_LOCATION;
+    @Shadow
+    @Final
+    private static ResourceLocation MOON_LOCATION;
 
-    @Shadow @Nullable private VertexBuffer starBuffer;
+    @Shadow
+    @Nullable
+    private VertexBuffer starBuffer;
 
-    @Shadow @Nullable private VertexBuffer darkBuffer;
+    @Shadow
+    @Nullable
+    private VertexBuffer darkBuffer;
 
     @Inject(method = "Lnet/minecraft/client/renderer/LevelRenderer;renderSky",
             at = @At(
@@ -54,7 +68,7 @@ public abstract class LevelRendererMixin {
     //have to completely override this method for compatibility reasons
     public void cl_renderSky(Matrix4f frustumMatrix, Matrix4f projectionMatrix, float partialTick, Camera camera, boolean isFoggy, Runnable skyFogSetup, CallbackInfo ci) {
         float override = ClientProxy.clSkyOverrideAmount;
-        if(override <= 0.0F){
+        if (override <= 0.0F) {
             return;
         }
         ci.cancel();
@@ -69,9 +83,9 @@ public abstract class LevelRendererMixin {
                         this.renderEndSky(posestack);
                     } else if (this.minecraft.level.effects().skyType() == DimensionSpecialEffects.SkyType.NORMAL) {
                         Vec3 vec3 = this.level.getSkyColor(this.minecraft.gameRenderer.getMainCamera().getPosition(), partialTick);
-                        float f = (float)vec3.x;
-                        float f1 = (float)vec3.y;
-                        float f2 = (float)vec3.z;
+                        float f = (float) vec3.x;
+                        float f1 = (float) vec3.y;
+                        float f2 = (float) vec3.z;
                         FogRenderer.levelFogColor();
                         Tesselator tesselator = Tesselator.getInstance();
                         RenderSystem.depthMask(false);
@@ -108,8 +122,8 @@ public abstract class LevelRendererMixin {
                             bufferbuilder.addVertex(matrix4f, 0.0F, 100.0F, 0.0F).setColor(f4, f12, f6, afloat[3]);
 
 
-                            for(int j = 0; j <= 16; ++j) {
-                                f7 = (float)j * 6.2831855F / 16.0F;
+                            for (int j = 0; j <= 16; ++j) {
+                                f7 = (float) j * 6.2831855F / 16.0F;
                                 f8 = Mth.sin(f7);
                                 f9 = Mth.cos(f7);
                                 bufferbuilder.addVertex(matrix4f, f8 * 120.0F, f9 * 120.0F, -f9 * 40.0F * afloat[3]).setColor(afloat[0], afloat[1], afloat[2], 0.0F);
@@ -142,10 +156,10 @@ public abstract class LevelRendererMixin {
                         int k = this.level.getMoonPhase();
                         int l = k % 4;
                         int i1 = k / 4 % 2;
-                        float f13 = (float)(l + 0) / 4.0F;
-                        f7 = (float)(i1 + 0) / 2.0F;
-                        f8 = (float)(l + 1) / 4.0F;
-                        f9 = (float)(i1 + 1) / 2.0F;
+                        float f13 = (float) (l + 0) / 4.0F;
+                        f7 = (float) (i1 + 0) / 2.0F;
+                        f8 = (float) (l + 1) / 4.0F;
+                        f9 = (float) (i1 + 1) / 2.0F;
                         bufferbuilder1 = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
                         bufferbuilder1.addVertex(matrix4f1, -f12, -100.0F, f12).setUv(f8, f9);
                         bufferbuilder1.addVertex(matrix4f1, f12, -100.0F, f12).setUv(f13, f9);

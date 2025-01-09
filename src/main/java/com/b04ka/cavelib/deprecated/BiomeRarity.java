@@ -20,7 +20,7 @@ public class BiomeRarity {
     private static double seperationDistance;
 
     /**
-     * Called after config reset
+     * Soon customizable
      */
     public static void init() {
         VORONOI_GENERATOR.setOffsetAmount(0.15D);

@@ -96,27 +96,27 @@ public class EventReplaceBiome extends Event {
         return depth >= min && depth <= max;
     }
 
-    public ExpandedBiomeSource getBiomeSource(){
+    public ExpandedBiomeSource getBiomeSource() {
         return biomeSource;
     }
 
-    public void setBiomeToGenerate(Holder<Biome> biome){
+    public void setBiomeToGenerate(Holder<Biome> biome) {
         biomeToGenerate = biome;
     }
 
-    public int getX(){
+    public int getX() {
         return x;
     }
 
-    public int getY(){
+    public int getY() {
         return y;
     }
 
-    public int getZ(){
+    public int getZ() {
         return z;
     }
 
-    public long getWorldSeed(){
+    public long getWorldSeed() {
         return worldSeed;
     }
 

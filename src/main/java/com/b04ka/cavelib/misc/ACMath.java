@@ -27,7 +27,7 @@ public class ACMath {
     public static final Direction[] NOT_UP_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.DOWN};
     public static final float HALF_SQRT_3 = (float) (Math.sqrt(3.0D) / 2.0D);
 
-    public static final float QUARTER_PI = ((float)Math.PI / 4F);
+    public static final float QUARTER_PI = ((float) Math.PI / 4F);
 
     public static float smin(float a, float b, float k) {
         float h = Math.max(k - Math.abs(a - b), 0.0F) / k;
@@ -98,7 +98,7 @@ public class ACMath {
     }
 
     public static float approachDegreesNoWrap(float from, float to, float by) {
-        float f = (to - from)  % 360.0F;
+        float f = (to - from) % 360.0F;
         return Mth.approach(from, from + f, by);
     }
 
@@ -112,8 +112,8 @@ public class ACMath {
         int i2 = j1 - k + 1;
         Set<Holder<Biome>> set = Sets.newHashSet();
 
-        for(int j2 = 0; j2 < i2; ++j2) {
-            for(int k2 = 0; k2 < k1; ++k2) {
+        for (int j2 = 0; j2 < i2; ++j2) {
+            for (int k2 = 0; k2 < k1; ++k2) {
                 int i3 = i + k2;
                 int k3 = k + j2;
                 set.add(biomeSource.getNoiseBiome(i3, j, k3, sampler));

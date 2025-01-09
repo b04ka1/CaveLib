@@ -1,5 +1,6 @@
 package com.b04ka.cavelib.deprecated;
 
+import com.b04ka.cavelib.CaveLib;
 import com.b04ka.cavelib.misc.VoronoiGenerator;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.FieldNamingPolicy;
@@ -23,30 +24,17 @@ import java.util.function.Predicate;
 public class BiomeGenerationConfig {
     public static final Gson GSON = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).setPrettyPrinting().create();
 
-    private static final String OVERWORLD = "minecraft:overworld";
-
-    public static final BiomeGenerationNoiseCondition MAGNETIC_CAVES_CONDITION = new BiomeGenerationNoiseCondition.Builder()
-            .dimensions(OVERWORLD).distanceFromSpawn(400).continentalness(0.6F, 1F).depth(0.2F, 1F).build();
-    public static final BiomeGenerationNoiseCondition PRIMORDIAL_CAVES_CONDITION = new BiomeGenerationNoiseCondition.Builder()
-            .dimensions(OVERWORLD).distanceFromSpawn(450).continentalness(0.4F, 1F).depth(0.15F, 1.5F).build();
-    public static final BiomeGenerationNoiseCondition TOXIC_CAVES_CONDITION = new BiomeGenerationNoiseCondition.Builder()
-            .dimensions(OVERWORLD).distanceFromSpawn(650).continentalness(0.5F, 1F).depth(0.3F, 1.5F).build();
-    public static final BiomeGenerationNoiseCondition ABYSSAL_CHASM_CONDITION = new BiomeGenerationNoiseCondition.Builder()
-            .dimensions(OVERWORLD).distanceFromSpawn(400).continentalness(-0.95F, -0.65F).temperature(-1.0F, 0.5F).depth(0.2F, 1.5F).build();
-    public static final BiomeGenerationNoiseCondition FORLORN_HOLLOWS_CONDITION = new BiomeGenerationNoiseCondition.Builder()
-            .dimensions(OVERWORLD).distanceFromSpawn(650).continentalness(0.6F, 1F).depth(0.3F, 1.5F).build();
-
     public static final LinkedHashMap<ResourceKey<Biome>, BiomeGenerationNoiseCondition> BIOMES = new LinkedHashMap<>();
 
     public static void addBiome(ResourceKey<Biome> biome, BiomeGenerationNoiseCondition condition) {
-        BIOMES.put(biome, getConfigData(biome.location().getPath(), condition));
+        BIOMES.put(biome, getConfigData(biome.location().toString(), condition));
     }
 
 
     @Nullable
     public static ResourceKey<Biome> getBiomeForEvent(EventReplaceBiome event) {
         VoronoiGenerator.VoronoiInfo voronoiInfo = BiomeRarity.getRareBiomeInfoForQuad(event.getWorldSeed(), event.getX(), event.getZ());
-        if(voronoiInfo != null){
+        if (voronoiInfo != null) {
             int foundRarityOffset = BiomeRarity.getRareBiomeOffsetId(voronoiInfo);
             for (Map.Entry<ResourceKey<Biome>, BiomeGenerationNoiseCondition> condition : BIOMES.entrySet()) {
                 if (foundRarityOffset == condition.getValue().getRarityOffset() && condition.getValue().test(event, voronoiInfo)) {
@@ -61,7 +49,7 @@ public class BiomeGenerationConfig {
         return BIOMES.size();
     }
 
-    public static boolean isBiomeDisabledCompletely(ResourceKey<Biome> biome){
+    public static boolean isBiomeDisabledCompletely(ResourceKey<Biome> biome) {
         BiomeGenerationNoiseCondition noiseCondition = BIOMES.get(biome);
         return noiseCondition != null && noiseCondition.isDisabledCompletely();
     }
@@ -72,6 +60,7 @@ public class BiomeGenerationConfig {
             try {
                 FileUtils.write(configFile, GSON.toJson(defaults));
             } catch (IOException e) {
+                CaveLib.LOGGER.error("Biome Generation Config: Could not write " + configFile, e);
             }
         }
         try {
@@ -80,12 +69,13 @@ public class BiomeGenerationConfig {
                 try {
                     FileUtils.write(configFile, GSON.toJson(defaults));
                 } catch (IOException e) {
+                    CaveLib.LOGGER.error("Biome Generation Config: Could not write " + configFile, e);
                 }
             } else {
                 return found;
             }
         } catch (Exception e) {
-
+            CaveLib.LOGGER.error("Biome Generation Config: Could not load " + configFile, e);
         }
 
         return defaults;
@@ -93,7 +83,7 @@ public class BiomeGenerationConfig {
 
     private static File getConfigDirectory() {
         Path configPath = FMLPaths.CONFIGDIR.get();
-        Path jsonPath = Paths.get(configPath.toAbsolutePath().toString(), "alexscaves_biome_generation");
+        Path jsonPath = Paths.get(configPath.toAbsolutePath().toString(), "cavelib_biome_generation");
         return jsonPath.toFile();
     }
 

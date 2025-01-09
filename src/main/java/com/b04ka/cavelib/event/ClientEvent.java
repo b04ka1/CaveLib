@@ -1,7 +1,7 @@
 package com.b04ka.cavelib.event;
 
 import com.b04ka.cavelib.biome.BiomeSampler;
-import com.b04ka.cavelib.biome.CaveBiomeVisulals;
+import com.b04ka.cavelib.biome.CaveBiomeVisuals;
 import com.b04ka.cavelib.proxy.ClientProxy;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -40,24 +40,24 @@ public class ClientEvent {
     }
 
     @SubscribeEvent
-    public void onClientTick(ClientTickEvent.Post event){
-            Entity cameraEntity = Minecraft.getInstance().cameraEntity;
-                if (cameraEntity!=null){
-                    ClientProxy.clSkyOverrideAmount = CaveBiomeVisulals.calculateBiomeSkyOverride(cameraEntity);
-                    if (ClientProxy.clSkyOverrideAmount > 0) {
-                        ClientProxy.clSkyOverrideColor = BiomeSampler.sampleBiomesVec3(Minecraft.getInstance().level, Minecraft.getInstance().cameraEntity.position(), biomeHolder -> Vec3.fromRGB24(biomeHolder.value().getSkyColor()));
-                    }
-                    ClientProxy.lastBiomeAmbientLightAmountPrev = ClientProxy.lastBiomeAmbientLightAmount;
-                    ClientProxy.lastBiomeAmbientLightAmount = calculateBiomeAmbientLight(cameraEntity);
-                    ClientProxy.lastBiomeLightColorPrev = ClientProxy.lastBiomeLightColor;
-                    ClientProxy.lastBiomeLightColor = calculateBiomeLightColor(cameraEntity);
-                    lastSampledFogNearness = calculateBiomeFogNearness(cameraEntity);
-                    lastSampledWaterFogFarness = calculateBiomeWaterFogFarness(cameraEntity);
-                    if (cameraEntity.level() instanceof ClientLevel) { //fixes crash with beholder
-                        lastSampledFogColor = calculateBiomeFogColor(cameraEntity);
-                        lastSampledWaterFogColor = calculateBiomeWaterFogColor(cameraEntity);
-                    }
-                }
+    public void onClientTick(ClientTickEvent.Post event) {
+        Entity cameraEntity = Minecraft.getInstance().cameraEntity;
+        if (cameraEntity != null) {
+            ClientProxy.clSkyOverrideAmount = CaveBiomeVisuals.calculateBiomeSkyOverride(cameraEntity);
+            if (ClientProxy.clSkyOverrideAmount > 0) {
+                ClientProxy.clSkyOverrideColor = BiomeSampler.sampleBiomesVec3(Minecraft.getInstance().level, Minecraft.getInstance().cameraEntity.position(), biomeHolder -> Vec3.fromRGB24(biomeHolder.value().getSkyColor()));
+            }
+            ClientProxy.lastBiomeAmbientLightAmountPrev = ClientProxy.lastBiomeAmbientLightAmount;
+            ClientProxy.lastBiomeAmbientLightAmount = calculateBiomeAmbientLight(cameraEntity);
+            ClientProxy.lastBiomeLightColorPrev = ClientProxy.lastBiomeLightColor;
+            ClientProxy.lastBiomeLightColor = calculateBiomeLightColor(cameraEntity);
+            lastSampledFogNearness = calculateBiomeFogNearness(cameraEntity);
+            lastSampledWaterFogFarness = calculateBiomeWaterFogFarness(cameraEntity);
+            if (cameraEntity.level() instanceof ClientLevel) { //fixes crash with beholder
+                lastSampledFogColor = calculateBiomeFogColor(cameraEntity);
+                lastSampledWaterFogColor = calculateBiomeWaterFogColor(cameraEntity);
+            }
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -89,7 +89,7 @@ public class ClientEvent {
     public void fogColor(ViewportEvent.ComputeFogColor event) {
         Entity player = Minecraft.getInstance().player;
         BlockState blockState = player.level().getBlockState(event.getCamera().getBlockPosition());
-            if (event.getCamera().getFluidInCamera() == FogType.NONE) {
+        if (event.getCamera().getFluidInCamera() == FogType.NONE) {
             float override = ClientProxy.clSkyOverrideAmount;
             float setR = event.getRed();
             float setG = event.getGreen();
@@ -123,9 +123,9 @@ public class ClientEvent {
     private static float calculateBiomeAmbientLight(Entity player) {
         int i = Minecraft.getInstance().options.biomeBlendRadius().get();
         if (i == 0) {
-            return CaveBiomeVisulals.getBiomeAmbientLight(player.level().getBiome(player.blockPosition()));
+            return CaveBiomeVisuals.getBiomeAmbientLight(player.level().getBiome(player.blockPosition()));
         } else {
-            return BiomeSampler.sampleBiomesFloat(player.level(), player.position(), CaveBiomeVisulals::getBiomeAmbientLight);
+            return BiomeSampler.sampleBiomesFloat(player.level(), player.position(), CaveBiomeVisuals::getBiomeAmbientLight);
         }
     }
 
@@ -133,9 +133,9 @@ public class ClientEvent {
         int i = Minecraft.getInstance().options.biomeBlendRadius().get();
         float nearness;
         if (i == 0) {
-            nearness = CaveBiomeVisulals.getBiomeFogNearness(player.level().getBiome(player.blockPosition()));
+            nearness = CaveBiomeVisuals.getBiomeFogNearness(player.level().getBiome(player.blockPosition()));
         } else {
-            nearness = BiomeSampler.sampleBiomesFloat(player.level(), player.position(), CaveBiomeVisulals::getBiomeFogNearness);
+            nearness = BiomeSampler.sampleBiomesFloat(player.level(), player.position(), CaveBiomeVisuals::getBiomeFogNearness);
         }
         return nearness;
     }
@@ -144,9 +144,9 @@ public class ClientEvent {
         int i = Minecraft.getInstance().options.biomeBlendRadius().get();
         float farness;
         if (i == 0) {
-            farness = CaveBiomeVisulals.getBiomeWaterFogFarness(player.level().getBiome(player.blockPosition()));
+            farness = CaveBiomeVisuals.getBiomeWaterFogFarness(player.level().getBiome(player.blockPosition()));
         } else {
-            farness = BiomeSampler.sampleBiomesFloat(player.level(), player.position(), CaveBiomeVisulals::getBiomeWaterFogFarness);
+            farness = BiomeSampler.sampleBiomesFloat(player.level(), player.position(), CaveBiomeVisuals::getBiomeWaterFogFarness);
         }
         return farness;
     }
@@ -154,9 +154,9 @@ public class ClientEvent {
     private static Vec3 calculateBiomeLightColor(Entity player) {
         int i = Minecraft.getInstance().options.biomeBlendRadius().get();
         if (i == 0) {
-            return CaveBiomeVisulals.getBiomeLightColorOverride(player.level().getBiome(player.blockPosition()));
+            return CaveBiomeVisuals.getBiomeLightColorOverride(player.level().getBiome(player.blockPosition()));
         } else {
-            return BiomeSampler.sampleBiomesVec3(player.level(), player.position(), CaveBiomeVisulals::getBiomeLightColorOverride);
+            return BiomeSampler.sampleBiomesVec3(player.level(), player.position(), CaveBiomeVisuals::getBiomeLightColorOverride);
         }
     }
 

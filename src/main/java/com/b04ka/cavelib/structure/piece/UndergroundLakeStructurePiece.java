@@ -41,24 +41,7 @@ public class UndergroundLakeStructurePiece extends AbstractCaveGenerationStructu
 
     @Override
     protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
-        tag.putInt("TPX", this.chunkCorner.getX());
-        tag.putInt("TPY", this.chunkCorner.getY());
-        tag.putInt("TPZ", this.chunkCorner.getZ());
-        tag.putInt("HCX", this.holeCenter.getX());
-        tag.putInt("HCY", this.holeCenter.getY());
-        tag.putInt("HCZ", this.holeCenter.getZ());
-        tag.putInt("Height", this.height);
-        tag.putInt("Radius", this.radius);
-        if (this.biomeResourceLocation != null) {
-            tag.putString("Biome", this.biomeResourceLocation.toString());
-        }
-        tag.putString("SurroundLiquid", BuiltInRegistries.BLOCK.getKey(this.surroundCornerOfLiquid).toString());
-        if (this.floor != null) {
-            tag.putString("Floor", BuiltInRegistries.BLOCK.getKey(this.floor).toString());
-            if (this.belowFloor != null) {
-                tag.putString("BelowFloor", BuiltInRegistries.BLOCK.getKey(this.belowFloor).toString());
-            }
-        }
+        super.addAdditionalSaveData(context, tag);
         tag.putString("Fluid", BuiltInRegistries.FLUID.getKey(this.fluid).toString());
     }
 

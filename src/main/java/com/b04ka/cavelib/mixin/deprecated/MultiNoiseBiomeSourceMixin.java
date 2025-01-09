@@ -1,7 +1,7 @@
 package com.b04ka.cavelib.mixin.deprecated;
 
-import com.b04ka.cavelib.misc.VoronoiGenerator;
 import com.b04ka.cavelib.deprecated.*;
+import com.b04ka.cavelib.misc.VoronoiGenerator;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
@@ -28,12 +28,12 @@ public class MultiNoiseBiomeSourceMixin implements MultiNoiseBiomeSourceAccessor
     )
     private void cl_getNoiseBiomeCoords(int x, int y, int z, Climate.Sampler sampler, CallbackInfoReturnable<Holder<Biome>> cir) {
         VoronoiGenerator.VoronoiInfo voronoiInfo = BiomeRarity.getRareBiomeInfoForQuad(lastSampledWorldSeed, x, z);
-        if(voronoiInfo != null){
+        if (voronoiInfo != null) {
             float unquantizedDepth = Climate.unquantizeCoord(sampler.sample(x, y, z).depth());
             int foundRarityOffset = BiomeRarity.getRareBiomeOffsetId(voronoiInfo);
             for (Map.Entry<ResourceKey<Biome>, BiomeGenerationNoiseCondition> condition : BiomeGenerationConfig.BIOMES.entrySet()) {
                 if (foundRarityOffset == condition.getValue().getRarityOffset() && condition.getValue().test(x, y, z, unquantizedDepth, sampler, lastSampledDimension, voronoiInfo)) {
-                    cir.setReturnValue(((BiomeSourceAccessor)this).getResourceKeyMap().get(condition.getKey()));
+                    cir.setReturnValue(((BiomeSourceAccessor) this).getResourceKeyMap().get(condition.getKey()));
                 }
             }
         }

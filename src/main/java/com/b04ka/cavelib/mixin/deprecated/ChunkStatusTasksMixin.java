@@ -21,7 +21,7 @@ public class ChunkStatusTasksMixin {
             method = "Lnet/minecraft/world/level/chunk/status/ChunkStatusTasks;generateNoise")
     private static void cl_fillFromNoise
             (WorldGenContext pWorldGenContext, ChunkStep pStep, StaticCache2D<GenerationChunkHolder> pCache, ChunkAccess pChunk, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> cir) {
-        if(pWorldGenContext.generator().getBiomeSource() instanceof MultiNoiseBiomeSourceAccessor multiNoiseBiomeSourceAccessor){
+        if (pWorldGenContext.generator().getBiomeSource() instanceof MultiNoiseBiomeSourceAccessor multiNoiseBiomeSourceAccessor) {
             multiNoiseBiomeSourceAccessor.setLastSampledSeed(pWorldGenContext.level().getSeed());
             multiNoiseBiomeSourceAccessor.setLastSampledDimension(pWorldGenContext.level().dimension());
         }

@@ -12,15 +12,15 @@ import java.util.Map;
 
 public class CaveSurfaceRules {
 
-    private static Map<ResourceKey<Biome>,SurfaceRules.RuleSource> ruleMap = new LinkedHashMap<>();
+    private static Map<ResourceKey<Biome>, SurfaceRules.RuleSource> ruleMap = new LinkedHashMap<>();
 
-    public static void setup(){
-        for (ResourceKey<Biome> biome: ruleMap.keySet()){
+    public static void setup() {
+        for (ResourceKey<Biome> biome : ruleMap.keySet()) {
             CitadelSurfaceRulesManager.registerOverworldSurfaceRule(SurfaceRules.isBiome(biome), ruleMap.get(biome));
         }
     }
 
-    public static void addRule(ResourceKey<Biome> biome, SurfaceRules.RuleSource rule){
+    public static void addRule(ResourceKey<Biome> biome, SurfaceRules.RuleSource rule) {
         ruleMap.put(biome, rule);
     }
 
