@@ -27,13 +27,22 @@ public class MultiNoiseBiomeSourceMixin implements MultiNoiseBiomeSourceAccessor
             cancellable = true
     )
     private void cl_getNoiseBiomeCoords(int x, int y, int z, Climate.Sampler sampler, CallbackInfoReturnable<Holder<Biome>> cir) {
-        VoronoiGenerator.VoronoiInfo voronoiInfo = BiomeRarity.getRareBiomeInfoForQuad(lastSampledWorldSeed, x, z);
-        if (voronoiInfo != null) {
-            float unquantizedDepth = Climate.unquantizeCoord(sampler.sample(x, y, z).depth());
-            int foundRarityOffset = BiomeRarity.getRareBiomeOffsetId(voronoiInfo);
-            for (Map.Entry<ResourceKey<Biome>, BiomeGenerationNoiseCondition> condition : BiomeGenerationConfig.BIOMES.entrySet()) {
-                if (foundRarityOffset == condition.getValue().getRarityOffset() && condition.getValue().test(x, y, z, unquantizedDepth, sampler, lastSampledDimension, voronoiInfo)) {
-                    cir.setReturnValue(((BiomeSourceAccessor) this).getResourceKeyMap().get(condition.getKey()));
+        for (Map.Entry<ResourceKey<Biome>, BiomeGenerationNoiseCondition> entry : BiomeGenerationConfig.BIOMES.entrySet()) {
+            BiomeGenerationNoiseCondition condition = entry.getValue();
+            double separation = condition.getSeparationDistance();
+            VoronoiGenerator.VoronoiInfo voronoiInfo = BiomeRarity.getRareBiomeInfoForQuad(
+                    condition.getOffsetAmount(),
+                    condition.getBiomeSize(),
+                    separation,
+                    lastSampledWorldSeed,
+                    x,
+                    z
+            );
+            if (voronoiInfo != null) {
+                float unquantizedDepth = Climate.unquantizeCoord(sampler.sample(x, y, z).depth());
+                int offsetId = BiomeRarity.getRareBiomeOffsetId(voronoiInfo);
+                if (offsetId == condition.getRarityOffset() && condition.test(x, y, z, unquantizedDepth, sampler, lastSampledDimension, voronoiInfo,separation )) {
+                    cir.setReturnValue(((BiomeSourceAccessor) this).getResourceKeyMap().get(entry.getKey()));
                 }
             }
         }

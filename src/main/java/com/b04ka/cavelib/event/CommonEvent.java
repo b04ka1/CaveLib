@@ -34,7 +34,6 @@ public class CommonEvent {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onServerAboutToStart(ServerAboutToStartEvent event) {
-        BiomeRarity.init();
         //moved from citadel
         RegistryAccess registryAccess = event.getServer().registryAccess();
         Registry<Biome> allBiomes = registryAccess.registryOrThrow(Registries.BIOME);

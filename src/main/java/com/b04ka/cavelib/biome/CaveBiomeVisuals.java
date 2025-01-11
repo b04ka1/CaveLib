@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CaveBiomeVisuals {
@@ -16,7 +17,7 @@ public class CaveBiomeVisuals {
              Vec3 lightColorOverride) {
     }
 
-    protected static List<BiomeProperty> caveBiomesMap = List.of();
+    protected static List<BiomeProperty> caveBiomesMap = new ArrayList<>();
     private static final Vec3 DEFAULT_LIGHT_COLOR = new Vec3(1, 1, 1);
 
     public static float getBiomeAmbientLight(Holder<Biome> value) {

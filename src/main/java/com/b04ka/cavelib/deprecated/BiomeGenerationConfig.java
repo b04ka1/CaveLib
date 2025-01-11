@@ -27,18 +27,30 @@ public class BiomeGenerationConfig {
     public static final LinkedHashMap<ResourceKey<Biome>, BiomeGenerationNoiseCondition> BIOMES = new LinkedHashMap<>();
 
     public static void addBiome(ResourceKey<Biome> biome, BiomeGenerationNoiseCondition condition) {
-        BIOMES.put(biome, getConfigData(biome.location().toString(), condition));
+        BIOMES.put(biome, getConfigData(biome.location().toLanguageKey(), condition));
     }
 
 
     @Nullable
     public static ResourceKey<Biome> getBiomeForEvent(EventReplaceBiome event) {
-        VoronoiGenerator.VoronoiInfo voronoiInfo = BiomeRarity.getRareBiomeInfoForQuad(event.getWorldSeed(), event.getX(), event.getZ());
-        if (voronoiInfo != null) {
-            int foundRarityOffset = BiomeRarity.getRareBiomeOffsetId(voronoiInfo);
-            for (Map.Entry<ResourceKey<Biome>, BiomeGenerationNoiseCondition> condition : BIOMES.entrySet()) {
-                if (foundRarityOffset == condition.getValue().getRarityOffset() && condition.getValue().test(event, voronoiInfo)) {
-                    return condition.getKey();
+        long worldSeed = event.getWorldSeed();
+        int x = event.getX();
+        int z = event.getZ();
+        for (Map.Entry<ResourceKey<Biome>, BiomeGenerationNoiseCondition> entry : BIOMES.entrySet()) {
+            BiomeGenerationNoiseCondition condition = entry.getValue();
+            double separation = condition.getSeparationDistance();
+            VoronoiGenerator.VoronoiInfo voronoiInfo = BiomeRarity.getRareBiomeInfoForQuad(
+                    condition.getOffsetAmount(),
+                    condition.getBiomeSize(),
+                    separation,
+                    worldSeed,
+                    x,
+                    z
+            );
+            if (voronoiInfo != null) {
+                int offsetId = BiomeRarity.getRareBiomeOffsetId(voronoiInfo);
+                if (offsetId == condition.getRarityOffset() && condition.test(event, voronoiInfo, separation)) {
+                    return entry.getKey();
                 }
             }
         }

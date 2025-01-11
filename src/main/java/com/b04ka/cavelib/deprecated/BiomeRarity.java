@@ -15,19 +15,6 @@ public class BiomeRarity {
     private static final PerlinSimplexNoise NOISE_X = new PerlinSimplexNoise(new XoroshiroRandomSource(1234L), BIOME_OCTAVES);
     private static final PerlinSimplexNoise NOISE_Z = new PerlinSimplexNoise(new XoroshiroRandomSource(4321L), BIOME_OCTAVES);
     private static final VoronoiGenerator VORONOI_GENERATOR = new VoronoiGenerator(42L);
-
-    private static double biomeSize;
-    private static double seperationDistance;
-
-    /**
-     * Soon customizable
-     */
-    public static void init() {
-        VORONOI_GENERATOR.setOffsetAmount(0.15D);
-        biomeSize = 300D * 0.25D;
-        seperationDistance = biomeSize + 900 * 0.25D;
-    }
-
     /**
      * Does the heavy lifting of finding if x and z quads should contain a rare biome.
      *
@@ -37,8 +24,9 @@ public class BiomeRarity {
      * @return the voroni info if a rare biome is present
      */
     @Nullable
-    public static VoronoiGenerator.VoronoiInfo getRareBiomeInfoForQuad(long worldSeed, int x, int z) {
+    public static VoronoiGenerator.VoronoiInfo getRareBiomeInfoForQuad(double offsetAmount, double biomeSize, double seperationDistance,long worldSeed, int x, int z) {
         //start of code to initialize noise for world
+        VORONOI_GENERATOR.setOffsetAmount(offsetAmount);
         VORONOI_GENERATOR.setSeed(worldSeed);
         double sampleX = x / seperationDistance;
         double sampleZ = z / seperationDistance;
@@ -59,7 +47,7 @@ public class BiomeRarity {
      * @return a coordinate
      */
     @Nullable
-    public static Vec3 getRareBiomeCenter(VoronoiGenerator.VoronoiInfo voronoiInfo) {
+    public static Vec3 getRareBiomeCenter(VoronoiGenerator.VoronoiInfo voronoiInfo, double seperationDistance) {
         return voronoiInfo.cellPos().scale(seperationDistance);
     }
 
@@ -74,7 +62,7 @@ public class BiomeRarity {
         return (int) (((voronoiInfo.hash() + 1D) * 0.5D) * (double) BiomeGenerationConfig.getBiomeCount());
     }
 
-    public static boolean isQuartInRareBiome(long worldSeed, int x, int z) {
-        return BiomeRarity.getRareBiomeInfoForQuad(worldSeed, x, z) != null;
-    }
+//    public static boolean isQuartInRareBiome(long worldSeed, int x, int z) {
+//        return BiomeRarity.getRareBiomeInfoForQuad(worldSeed, x, z) != null;
+//    }
 }
